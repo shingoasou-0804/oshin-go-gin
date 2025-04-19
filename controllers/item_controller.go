@@ -5,12 +5,14 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/shingoasou-0804/oshin-go-gin/dto"
 	"github.com/shingoasou-0804/oshin-go-gin/services"
 )
 
 type IItemController interface {
 	FindAll(ctx *gin.Context)
 	FindById(ctx *gin.Context)
+	Create(ctx *gin.Context)
 }
 
 type ItemController struct {
@@ -46,4 +48,18 @@ func (c *ItemController) FindById(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"data": item})
+}
+
+func (c *ItemController) Create(ctx *gin.Context) {
+	var input dto.CreateItemInput
+	if err := ctx.ShouldBindJSON(&input); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	newItem, err := c.service.Create(input)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusCreated, gin.H{"data": newItem})
 }
