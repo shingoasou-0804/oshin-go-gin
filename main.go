@@ -22,5 +22,6 @@ func main() {
 	r.GET("/items", itemController.FindAll)
 	r.GET("/items/:id", itemController.FindById)
 	r.POST("/items", itemController.Create)
+	r.PUT("/items/:id", itemController.Update)
 	r.Run(":8080")
 }
