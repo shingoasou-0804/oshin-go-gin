@@ -104,7 +104,12 @@ func (r *ItemRepository) Update(updateItem models.Item) (*models.Item, error) {
 }
 
 func (r *ItemRepository) Delete(itemId uint) error {
-	result := r.db.Delete(&models.Item{}, itemId)
+	deleteItem, err := r.FindById(itemId)
+	if err != nil {
+		return err
+	}
+
+	result := r.db.Delete(deleteItem)
 	if result.Error != nil {
 		return result.Error
 	}
