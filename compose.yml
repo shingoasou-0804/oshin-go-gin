@@ -9,3 +9,52 @@ services:
       - .:/app
     environment:
       - GIN_MODE=debug
+    depends_on:
+      - db
+    networks:
+      - api-db-network
+
+  db:
+    image: postgres:16-alpine
+    container_name: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./docker/postgres/init.d:/docker-entrypoint-initdb.d
+      - ./docker/postgres/pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ginuser
+      POSTGRES_PASSWORD: ginpassword
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+      POSTGRES_DB: fleamarket
+    hostname: postgres
+    restart: always
+    user: root
+    networks:
+      - api-db-network
+      - db-pgadmin-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - 81:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: gin@example.com
+      PGADMIN_DEFAULT_PASSWORD: ginpassword
+    volumes:
+      - ./docker/pgadmin:/var/lib/pgadmin
+    depends_on:
+      - db
+    networks:
+      - db-pgadmin-network
+
+volumes:
+  pgdata:
+  pgadmin:
+
+networks:
+  api-db-network:
+    external: true
+  db-pgadmin-network:
+    external: true

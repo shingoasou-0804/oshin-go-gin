@@ -36,5 +36,8 @@ go.work
 # Log files
 *.log
 
+# Directory created at docker startup
+docker
+
 # Air live reload
 tmp/
