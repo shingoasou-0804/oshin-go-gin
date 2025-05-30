@@ -79,6 +79,9 @@ func (r *ItemRepository) FindById(itemId uint) (*models.Item, error) {
 	var item models.Item
 	result := r.db.First(&item, itemId)
 	if result.Error != nil {
+		if result.Error.Error() == "record not found" {
+			return nil, errors.New("Item not found")
+		}
 		return nil, result.Error
 	}
 	return &item, nil
