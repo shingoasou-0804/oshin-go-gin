@@ -1,6 +1,10 @@
 package services
 
 import (
+	"os"
+	"time"
+
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/shingoasou-0804/oshin-go-gin/models"
 	"github.com/shingoasou-0804/oshin-go-gin/repositories"
 	"golang.org/x/crypto/bcrypt"
@@ -42,5 +46,24 @@ func (s *AuthService) Login(email string, password string) (*string, error) {
 		return nil, err
 	}
 
-	return &user.Email, nil
+	token, err := CreateToken(user.ID, user.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	return token, nil
+}
+
+func CreateToken(userId uint, email string) (*string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": userId,
+		"email": email,
+		"exp": time.Now().Add(time.Hour).Unix(),
+	})
+
+	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET_KEY")))
+	if err != nil {
+		return nil, err
+	}
+	return &tokenString, nil
 }
