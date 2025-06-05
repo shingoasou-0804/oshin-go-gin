@@ -5,6 +5,7 @@ import (
 	"github.com/shingoasou-0804/oshin-go-gin/controllers"
 	"github.com/shingoasou-0804/oshin-go-gin/infra"
 	// "github.com/shingoasou-0804/oshin-go-gin/models"
+	"github.com/gin-contrib/cors"
 	"github.com/shingoasou-0804/oshin-go-gin/middlewares"
 	"github.com/shingoasou-0804/oshin-go-gin/repositories"
 	"github.com/shingoasou-0804/oshin-go-gin/services"
@@ -28,6 +29,7 @@ func main() {
 	authController := controllers.NewAuthController(authService)
 
 	r := gin.Default()
+	r.Use(cors.Default())
 	itemRouter := r.Group("/items")
 	itemRouterWithAuth := r.Group("/items", middlewares.AuthMiddleware(authService))
 	authRouter := r.Group("/auth")
