@@ -1,7 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"testing"
 
@@ -9,6 +12,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/shingoasou-0804/oshin-go-gin/infra"
 	"github.com/shingoasou-0804/oshin-go-gin/models"
+	"github.com/stretchr/testify/assert"
 	"gorm.io/gorm"
 )
 
@@ -29,21 +33,21 @@ func setupTestData(db *gorm.DB) {
 			Price: 1000,
 			Description: "",
 			SoldOut: false,
-			UserID: 1
+			UserID: 1,
 		},
 		{
 			Name: "テストアイテム2",
 			Price: 2000,
 			Description: "テスト2",
 			SoldOut: true,
-			UserID: 1
+			UserID: 1,
 		},
 		{
 			Name: "テストアイテム3",
 			Price: 3000,
 			Description: "テスト3",
 			SoldOut: false,
-			UserID: 2
+			UserID: 2,
 		},
 	}
 
@@ -75,4 +79,23 @@ func setup() *gin.Engine {
 	router := setupRouter(db)
 
 	return router
+}
+
+func TestFindAll(t *testing.T) {
+	// テストのセットアップ
+	router := setup()
+
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/items", nil)
+
+	// APIリクエストの実行
+	router.ServeHTTP(w, req)
+
+	// APIの実行結果を取得する
+	var res map[string][]models.Item
+	json.Unmarshal([]byte(w.Body.String()), &res)
+
+	// アサーション
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, 3, len(res["data"]))
 }
