@@ -8,7 +8,10 @@ require (
 	github.com/gin-contrib/cors v1.5.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang-jwt/jwt/v5 v5.2.2
+	github.com/joho/godotenv v1.5.1
 	gorm.io/driver/postgres v1.5.7
+	gorm.io/driver/sqlite v1.5.5
+	gorm.io/gorm v1.25.7
 )
 
 require (
@@ -20,6 +23,8 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/kr/text v0.1.0 // indirect
+	github.com/mattn/go-sqlite3 v1.14.17 // indirect
+	github.com/stretchr/testify v1.10.0 // indirect
 )
 
 require (
@@ -30,7 +35,6 @@ require (
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.26.0 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
-	github.com/joho/godotenv v1.5.1
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
@@ -47,5 +51,4 @@ require (
 	golang.org/x/text v0.22.0 // indirect
 	google.golang.org/protobuf v1.34.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/gorm v1.25.7
 )
